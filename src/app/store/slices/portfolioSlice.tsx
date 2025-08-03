@@ -1,4 +1,4 @@
-import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
+import {createSlice, nanoid, type PayloadAction} from "@reduxjs/toolkit";
 
 interface Asset {
     id: string;
@@ -20,9 +20,13 @@ const portfolioSlice = createSlice({
     name: 'portfolio',
     initialState,
     reducers: {
-        addAsset: (state, action: PayloadAction<Asset>) => {
+        addAsset: (state, action: PayloadAction<Omit<Asset, 'id' | 'date'>>) => {
             const newAsset = action.payload;
-            state.assets.push(newAsset);
+            state.assets.push({
+                id: nanoid(),
+                date: new Date().toISOString(),
+                ...newAsset,
+            });
         },
         removeAsset: (state, action: PayloadAction<string>) => {
             const id = action.payload;
